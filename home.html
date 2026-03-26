@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./assets/github-logo.png" type="image/x-icon" />
+    <title>Github Issue Tracker</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+
+    <!-- DaisyUI + Tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- styles -->
+    <style>
+      * {
+        font-family: "Geist", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50">
+    <header>
+      <div class="navbar bg-base-100 shadow-sm px-20">
+        <div class="flex-1 flex items-center">
+          <img class="w-9 mr-2" src="./assets/github-logo.png" />
+          <p>GitHub Issues Tracker</p>
+        </div>
+        <div class="flex gap-2">
+          <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
+          <button class="btn btn-primary">
+            <i class="fa-solid fa-plus fa-lg"></i>
+            Primary
+          </button>
+        </div>
+      </div>
+    </header>
+    <section class="max-w-[1160px] w-full mx-auto py-15">
+      <!-- section header -->
+      <header class="p-6 shadow-[0_1px_6px_0_rgba(0,0,0,0.08)] rounded-lg bg-base-100 mb-4">
+        <button class="btn hover:bg-neutral hover:text-white w-30 h-10">All</button>
+        <button class="btn hover:bg-neutral hover:text-white w-30 h-10">Open</button>
+        <button class="btn hover:bg-neutral hover:text-white w-30 h-10">Closed</button>
+      </header>
+
+      <!-- section body -->
+      <div class="p-6 shadow-[0_1px_6px_0_rgba(0,0,0,0.08)] rounded-lg bg-base-100">
+        <header class="flex items-center justify-between border-b border-zinc-200 py-6">
+          <div class="flex items-center gap-2">
+            <img class="w-10" src="./assets/Aperture.png" />
+            <div>
+              <h2 id="total-issue" class="font-semibold text-xl">Issues</h2>
+              <p class="text-slate-500">Track and manage your project issues</p>
+            </div>
+          </div>
+          <div>
+            <span class="mr-4">
+              <i class="fa-solid fa-circle" style="color: rgb(61, 152, 1)"></i>
+              Open
+            </span>
+            <span>
+              <i class="fa-solid fa-circle" style="color: rgb(177, 151, 252)"></i>
+              Closed
+            </span>
+          </div>
+        </header>
+
+        <div id="cards" class="p-6 grid grid-cols-3 gap-3">
+          
+        </div>
+      </div>
+    </section>
+
+    <script src="./scripts/index.js"></script>
+  </body>
+</html>
