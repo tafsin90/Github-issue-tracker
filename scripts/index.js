@@ -1,16 +1,48 @@
+let fetchedData = [];
+
 // fetch all issues
 const allIssues = async () => {
   const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
   const data = await res.json();
-  const totalIssues = data.data;
-//   console.log("🚀 ~ allIssues ~ totalIssues:", totalIssues)
+  fetchedData = data.data;
+  //   console.log("🚀 ~ allIssues ~ fetchedData:", fetchedData)
 
-  document.getElementById("total-issue").innerText = `${totalIssues.length} Issues`;
+  document.getElementById("total-issue").innerText = `${fetchedData.length} Issues`;
 
-  displayCards(totalIssues);
+  activeButton("btn-all");
+  displayCards(fetchedData);
 };
 
+// making button active
+document.getElementById("btn-open").addEventListener("click", () => {
+  const openIssues = fetchedData.filter((issue) => issue.status === "open");
+  activeButton("btn-open");
+  displayCards(openIssues);
+  document.getElementById("total-issue").innerText = `${openIssues.length} Open Issues`;
+});
 
+document.getElementById("btn-close").addEventListener("click", () => {
+  const closedIssues = fetchedData.filter((issue) => issue.status === "closed");
+  activeButton("btn-close");
+  displayCards(closedIssues);
+  document.getElementById("total-issue").innerText = `${closedIssues.length} Closed Issues`;
+});
+
+document.getElementById("btn-all").addEventListener("click", () => {
+  activeButton("btn-all");
+  displayCards(fetchedData);
+  document.getElementById("total-issue").innerText = `${fetchedData.length} Issues`;
+});
+
+const activeButton = (btnID) => {
+  const buttons = document.querySelectorAll("#buttons button");
+  buttons.forEach((btn) => {
+    btn.classList.remove("active");
+  });
+
+  const activeBtn = document.getElementById(btnID);
+  activeBtn.classList.add("active");
+};
 
 const displayCards = (issues) => {
   const cards = document.getElementById("cards");
@@ -76,7 +108,7 @@ const displayCards = (issues) => {
                     ${aLabel}
             </span>
         `;
-        })
+        }) 
         .join(" ");
     };
 
@@ -108,6 +140,5 @@ const displayCards = (issues) => {
     cards.appendChild(card);
   }
 };
-
 
 allIssues();
