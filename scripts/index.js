@@ -15,7 +15,9 @@ const allIssues = async () => {
 
 // making button active
 document.getElementById("btn-open").addEventListener("click", () => {
-  const openIssues = fetchedData.filter((issue) => issue.status === "open");
+  const openIssues = fetchedData.filter((issue) => {
+    return issue.status === "open";
+  });
   activeButton("btn-open");
   displayCards(openIssues);
   document.getElementById("total-issue").innerText = `${openIssues.length} Open Issues`;
@@ -44,62 +46,61 @@ const activeButton = (btnID) => {
   activeBtn.classList.add("active");
 };
 
+// priority style
+const priorityStyle = {
+  high: "bg-red-100 text-red-700 w-20 text-center rounded-full",
+  medium: "bg-yellow-100 text-yellow-700 w-20 text-center rounded-full",
+  low: "bg-slate-100 text-slate-700 w-20 text-center rounded-full",
+};
 
-    // priority style
-    const priorityStyle = {
-      high: "bg-red-100 text-red-700 w-20 text-center rounded-full",
-      medium: "bg-yellow-100 text-yellow-700 w-20 text-center rounded-full",
-      low: "bg-slate-100 text-slate-700 w-20 text-center rounded-full",
+//labeling --- 1
+const labelStyle = (label) => {
+  if (label.includes("bug")) {
+    return {
+      label: `px-2 bg-red-100 text-red-700 text-center rounded-full`,
+      icon: `fa-solid fa-bug text-red-700`,
     };
-
-    //labeling --- 1
-    const labelStyle = (label) => {
-      if (label.includes("bug")) {
-        return {
-          label: `px-2 bg-red-100 text-red-700 text-center rounded-full`,
-          icon: `fa-solid fa-bug text-red-700`,
-        };
-      }
-      if (label.includes("help wanted")) {
-        return {
-          label: `px-2 bg-yellow-100 text-yellow-600 text-center rounded-full`,
-          icon: `fa-solid fa-circle-question text-yellow-700  `,
-        };
-      }
-      if (label.includes("enhancement")) {
-        return {
-          label: `px-2 bg-green-100 text-green-700 text-center rounded-full`,
-          icon: `fa-solid fa-arrow-up-right-dots text-green-700`,
-        };
-      }
-      if (label.includes("good first issue")) {
-        return {
-          label: `px-2 bg-amber-100 text-amber-700 text-center rounded-full`,
-          icon: `fa-solid fa-anchor-circle-exclamation text-amber-700`,
-        };
-      }
-      if (label.includes("documentation")) {
-        return {
-          label: `px-2 bg-gray-100 text-gray-700 text-center rounded-full`,
-          icon: `fa-solid fa-file text-gray-700`,
-        };
-      }
+  }
+  if (label.includes("help wanted")) {
+    return {
+      label: `px-2 bg-yellow-100 text-yellow-600 text-center rounded-full`,
+      icon: `fa-solid fa-circle-question text-yellow-700  `,
     };
-    //labeling --- 2
-    const labeling = (arr) => {
-      return arr
-        .map((aLabel) => {
-          const labelValue = labelStyle(aLabel);
+  }
+  if (label.includes("enhancement")) {
+    return {
+      label: `px-2 bg-green-100 text-green-700 text-center rounded-full`,
+      icon: `fa-solid fa-arrow-up-right-dots text-green-700`,
+    };
+  }
+  if (label.includes("good first issue")) {
+    return {
+      label: `px-2 bg-amber-100 text-amber-700 text-center rounded-full`,
+      icon: `fa-solid fa-anchor-circle-exclamation text-amber-700`,
+    };
+  }
+  if (label.includes("documentation")) {
+    return {
+      label: `px-2 bg-gray-100 text-gray-700 text-center rounded-full`,
+      icon: `fa-solid fa-file text-gray-700`,
+    };
+  }
+};
+//labeling --- 2
+const labeling = (arr) => {
+  return arr
+    .map((aLabel) => {
+      const labelValue = labelStyle(aLabel);
 
-          return `
+      return `
             <span class="${labelValue.label}">
                 <i class="${labelValue.icon} pr-1"></i>
                     ${aLabel}
             </span>
         `;
-        }) 
-        .join(" ");
-    };
+    })
+    .join(" ");
+};
 
 // display cards
 const displayCards = (issues) => {
@@ -108,16 +109,15 @@ const displayCards = (issues) => {
   for (let issue of issues) {
     // make card
     const card = document.createElement("div");
-    card.addEventListener("click", ()=>{
-      loadModal(issue.id)
+    card.style.cursor = "pointer";
+    card.addEventListener("click", () => {
+      loadModal(issue.id);
     });
     if (issue.status == "open") {
       card.classList.add("shadow-[0_1px_6px_0_rgba(0,0,0,0.10)]", "rounded-lg", "border-t-4", "border-green-500");
     } else {
       card.classList.add("shadow-[0_1px_6px_0_rgba(0,0,0,0.10)]", "rounded-lg", "border-t-4", "border-purple-500");
     }
-
-
 
     card.innerHTML = `
     <div class="border-b p-6 border-zinc-200 space-y-3">
@@ -148,13 +148,11 @@ const displayCards = (issues) => {
   }
 };
 
-
 // modal
-const loadModal = async(id) => {
+const loadModal = async (id) => {
   const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`);
   const data = await res.json();
   modalData = data.data;
-
 
   document.getElementById(`my_modal_5`).showModal();
   const modal = document.getElementById("modal-bx");
@@ -199,10 +197,24 @@ const loadModal = async(id) => {
   
   `;
   modal.append(modalContainer);
-  
-}
+};
 
+// Search functionality
+const searchDataFetch = async (searchValue) => {
+  const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`);
+  const data = await res.json();
+  const searchedCard = data.data;
+  if(searchValue === ""){
+    allIssues();
+  }
+  displayCards(searchedCard)
+};
 
+document.getElementById("input-search").addEventListener("input", (e) => {
+  const searchValue = e.target.value.trim().toLowerCase();
+  // console.log(searchValue);
 
+  searchDataFetch(searchValue);
+});
 
 allIssues();
