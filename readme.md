@@ -1,4 +1,4 @@
-## 1️⃣ What is the difference between `var`, `let`, and `const`?
+## 1. What is the difference between `var`, `let`, and `const`?
 
 - `var`
   - Can be re-declared and updated.
@@ -9,7 +9,7 @@
   - Block-scoped.
   - Cannot be updated or re-declared in the same scope.
 
-## 2️⃣ What is the spread operator (`...`)?
+## 2. What is the spread operator (`...`)?
 
 - Syntax: `...` (three dots).
 - Copies iterable values (arrays, strings, objects) by spreading contents.
@@ -18,7 +18,7 @@
   - Object clone: `{...obj}`
   - Function args: `fn(...args)`
 
-## 3️⃣ What is the difference between `map()`, `filter()`, and `forEach()`?
+## 3. What is the difference between `map()`, `filter()`, and `forEach()`?
 
 - `map()`
   - Returns a new array with the results of calling a function on every element.
@@ -28,12 +28,12 @@
   - Does not modify original array.
 - `forEach()`
   - Executes a function on each element.
-## 4️⃣ What is an arrow function?
+## 4. What is an arrow function?
 
 - Concise syntax for function expressions using `=>`.
 - Example: `const add = (a, b) => a + b;`
 
-## 5️⃣ What are template literals?
+## 5. What are template literals?
 
 - String literals using backticks (`` ` ``) instead of quotes.
 - Support interpolation: `` `Hello, ${name}!` ``.
