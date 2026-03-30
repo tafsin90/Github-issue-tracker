@@ -44,17 +44,6 @@ const activeButton = (btnID) => {
   activeBtn.classList.add("active");
 };
 
-const displayCards = (issues) => {
-  const cards = document.getElementById("cards");
-  cards.innerHTML = "";
-  for (let issue of issues) {
-    // make card
-    const card = document.createElement("div");
-    if (issue.status == "open") {
-      card.classList.add("shadow-[0_1px_6px_0_rgba(0,0,0,0.10)]", "rounded-lg", "border-t-4", "border-green-500");
-    } else {
-      card.classList.add("shadow-[0_1px_6px_0_rgba(0,0,0,0.10)]", "rounded-lg", "border-t-4", "border-purple-500");
-    }
 
     // priority style
     const priorityStyle = {
@@ -112,6 +101,24 @@ const displayCards = (issues) => {
         .join(" ");
     };
 
+// display cards
+const displayCards = (issues) => {
+  const cards = document.getElementById("cards");
+  cards.innerHTML = "";
+  for (let issue of issues) {
+    // make card
+    const card = document.createElement("div");
+    card.addEventListener("click", ()=>{
+      loadModal(issue.id)
+    });
+    if (issue.status == "open") {
+      card.classList.add("shadow-[0_1px_6px_0_rgba(0,0,0,0.10)]", "rounded-lg", "border-t-4", "border-green-500");
+    } else {
+      card.classList.add("shadow-[0_1px_6px_0_rgba(0,0,0,0.10)]", "rounded-lg", "border-t-4", "border-purple-500");
+    }
+
+
+
     card.innerHTML = `
     <div class="border-b p-6 border-zinc-200 space-y-3">
         <div class="flex justify-between items-center mb-5">
@@ -140,5 +147,62 @@ const displayCards = (issues) => {
     cards.appendChild(card);
   }
 };
+
+
+// modal
+const loadModal = async(id) => {
+  const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`);
+  const data = await res.json();
+  modalData = data.data;
+
+
+  document.getElementById(`my_modal_5`).showModal();
+  const modal = document.getElementById("modal-bx");
+  modal.innerHTML = "";
+  const modalContainer = document.createElement("div");
+  modalContainer.classList.add("space-y-6");
+  modalContainer.innerHTML = `
+          <div class="space-y-2">
+            <h1 class="text-2xl font-semibold">${modalData.title}</h1>
+            <div class="space-x-2">
+              <span class="bg-green-600 text-white rounded-full py-1 px-3">${modalData.status}</span>
+              <span class="text-gray-600">&bull;</span>
+              <span class="text-gray-600">Opened by ${modalData.author}</span>
+              <span class="text-gray-600">&bull;</span>
+              <span class="text-gray-600">${new Date(modalData.updatedAt).toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-1">
+            ${labeling(modalData.labels)}
+          </div>
+
+          <p class="text-gray-600 text-lg">${modalData.description}</p>
+
+          <div class="flex ">
+            <div class="flex-1 space-y-1">
+              <h3 class="text-gray-600">Assignee:</h3>
+              <h2 class="font-semibold">${modalData.assignee}</h2>
+            </div>
+            <div class="flex-1 space-y-1">
+              <h3 class="text-gray-600">Priority:</h3>
+              <div class="${priorityStyle[modalData.priority]}"> ${modalData.priority}</div>
+            </div>
+          </div>
+
+          <div class="modal-action">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn btn-primary px-8">Close</button>
+            </form>
+          </div>
+  
+  `;
+  modal.append(modalContainer);
+  
+}
+
+
+
 
 allIssues();
